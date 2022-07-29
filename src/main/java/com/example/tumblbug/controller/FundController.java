@@ -1,7 +1,6 @@
 package com.example.tumblbug.controller;
 
 import com.example.tumblbug.dto.FundRequestDto;
-import com.example.tumblbug.dto.FundResponseDto;
 import com.example.tumblbug.security.UserDetailsImpl;
 import com.example.tumblbug.service.FundService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +17,8 @@ public class FundController {
 
     // 후원하기
     @PostMapping("/api/funds")
-    public FundResponseDto postFund(@RequestBody FundRequestDto fundRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return fundService.fund(fundRequestDto, userDetails.getUser());
+    public void postFund(@RequestBody FundRequestDto fundRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        fundService.fund(fundRequestDto, userDetails.getUser());
     }
 
 }
