@@ -52,5 +52,10 @@ public class Project {
     @JoinColumn(name = "userId")
     private User user;
 
+    public void addFund(Reward reward) {
+        totalFundingPrice += reward.getFundingPrice();
+        fundingCount++;
+    }
+
 }
 
