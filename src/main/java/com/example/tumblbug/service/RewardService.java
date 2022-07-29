@@ -11,3 +11,4 @@ public class RewardService {
     private final RewardRepository rewardRepository;
 
 }
+

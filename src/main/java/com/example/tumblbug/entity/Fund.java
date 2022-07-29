@@ -24,3 +24,4 @@ public class Fund {
     private Reward reward;
 
 }
+
