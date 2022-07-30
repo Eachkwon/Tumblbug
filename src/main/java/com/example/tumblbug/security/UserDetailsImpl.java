@@ -19,10 +19,7 @@ public class UserDetailsImpl implements UserDetails {
         return user;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
-    }
+    public String getName() { return user.getName(); }
 
     @Override
     public String getPassword() {
@@ -54,5 +51,8 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
+    }
 }
-
