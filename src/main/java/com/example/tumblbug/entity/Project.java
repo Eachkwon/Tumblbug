@@ -1,5 +1,6 @@
 package com.example.tumblbug.entity;
 
+import com.example.tumblbug.dto.ProjectRequesetDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,6 +57,23 @@ public class Project {
     @JoinColumn(name = "userId")
     private User user;
 
+    public Project(ProjectRequesetDto projectRequestDto) {
+        this.category = projectRequestDto.getCategory();
+        this.summary = projectRequestDto.getSummary();
+        this.title = projectRequestDto.getTitle();
+        this.thumbnailUrls = projectRequestDto.getThumbnailUrls();
+        this.goal = projectRequestDto.getGoal();
+        this.startDate = projectRequestDto.getStartDate();
+        this.endDate = projectRequestDto.getEndDate();
+        this.rewards = projectRequestDto.getRewards();
+        this.plan = projectRequestDto.getPlan();
+        this.images = projectRequestDto.getImages();
+        this.creatorName = projectRequestDto.getCreatorName();
+        this.creatorBiography = projectRequestDto.getCreatorBiography();
+        this.totalFundingPrice = projectRequestDto.getTotalFundingPrice();
+        this.fundingCount = projectRequestDto.getFundingCount();
+    }
+    
     public void addFund(Reward reward) {
         totalFundingPrice += reward.getFundingPrice();
         fundingCount++;
