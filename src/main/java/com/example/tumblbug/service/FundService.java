@@ -3,6 +3,7 @@ package com.example.tumblbug.service;
 import com.example.tumblbug.dto.FundRequestDto;
 import com.example.tumblbug.dto.FundResponseDto;
 import com.example.tumblbug.entity.Fund;
+import com.example.tumblbug.entity.Project;
 import com.example.tumblbug.entity.Reward;
 import com.example.tumblbug.entity.User;
 import com.example.tumblbug.repository.FundRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -28,8 +30,15 @@ public class FundService {
         Long rewardId = fundRequestDto.getRewardId();
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reward " + rewardId + " is not found"));
+        Project project = reward.getProject();
+        if (LocalDateTime.now().isBefore(project.getStartDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "아직 펀딩을 시작하지 않았습니다");
+        }
+        if (LocalDateTime.now().isAfter(project.getEndDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 펀딩이 종료되었습니다");
+        }
         Fund fund = fundRepository.save(new Fund(user, reward));
-        reward.getProject().addFund(reward);
+        project.addFund(reward);
         return new FundResponseDto(fund);
     }
 

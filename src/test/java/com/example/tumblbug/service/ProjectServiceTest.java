@@ -93,19 +93,19 @@ class ProjectServiceTest {
                 ProjectDetailResponseDto projectDetailResponseDto = projectService.getProjectDetail(projectId);
 
                 // then
-                assertEquals(projectDetailResponseDto.getCategory(), project.getCategory());
-                assertEquals(projectDetailResponseDto.getSummary(), project.getSummary());
-                assertEquals(projectDetailResponseDto.getTitle(), project.getTitle());
-                assertEquals(projectDetailResponseDto.getThumbnails(), project.getThumbnails());
-                assertEquals(projectDetailResponseDto.getGoal(), project.getGoal());
-                assertEquals(projectDetailResponseDto.getStartDate(), project.getStartDate());
-                assertEquals(projectDetailResponseDto.getEndDate(), project.getEndDate());
-                assertEquals(projectDetailResponseDto.getRewards(), project.getRewards().stream().map(RewardResponseDto::new).collect(Collectors.toList()));
-                assertEquals(projectDetailResponseDto.getPlan(), project.getPlan());
-                assertEquals(projectDetailResponseDto.getCreatorName(), project.getCreatorName());
-                assertEquals(projectDetailResponseDto.getCreatorBiography(), project.getCreatorBiography());
-                assertEquals(projectDetailResponseDto.getTotalFundingPrice(), project.getTotalFundingPrice());
-                assertEquals(projectDetailResponseDto.getFundingCount(), project.getFundingCount());
+                assertEquals(project.getCategory(), projectDetailResponseDto.getCategory());
+                assertEquals(project.getSummary(), projectDetailResponseDto.getSummary());
+                assertEquals(project.getTitle(), projectDetailResponseDto.getTitle());
+                assertEquals(project.getThumbnails(), projectDetailResponseDto.getThumbnails());
+                assertEquals(project.getGoal(), projectDetailResponseDto.getGoal());
+                assertEquals(project.getStartDate(), projectDetailResponseDto.getStartDate());
+                assertEquals(project.getEndDate(), projectDetailResponseDto.getEndDate());
+                assertEquals(project.getRewards().stream().map(RewardResponseDto::new).collect(Collectors.toList()), projectDetailResponseDto.getRewards());
+                assertEquals(project.getPlan(), projectDetailResponseDto.getPlan());
+                assertEquals(project.getCreatorName(), projectDetailResponseDto.getCreatorName());
+                assertEquals(project.getCreatorBiography(), projectDetailResponseDto.getCreatorBiography());
+                assertEquals(project.getTotalFundingPrice(), projectDetailResponseDto.getTotalFundingPrice());
+                assertEquals(project.getFundingCount(), projectDetailResponseDto.getFundingCount());
             }
 
         }
