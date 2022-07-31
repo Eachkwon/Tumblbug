@@ -19,9 +19,13 @@ public class Fund {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "rewardId")
     private Reward reward;
 
-}
+    public Fund(User user, Reward reward) {
+        this.user = user;
+        this.reward = reward;
+    }
 
+}

@@ -1,6 +1,7 @@
 package com.example.tumblbug.controller;
 
 import com.example.tumblbug.dto.AllProjectResponseDto;
+import com.example.tumblbug.dto.ProjectDetailResponseDto;
 import com.example.tumblbug.dto.ProjectRequesetDto;
 import com.example.tumblbug.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,12 @@ public class ProjectController {
     @GetMapping("/api/projects")
     public List<AllProjectResponseDto> getAllProjects(@RequestParam String category) {
         return projectService.getAllProjects();
+    }
+    
+    // 프로젝트 상세정보 조회
+    @GetMapping("/api/projects/{projectId}")
+    public ProjectDetailResponseDto getProject(@PathVariable Long projectId) {
+        return projectService.getProjectDetail(projectId);
     }
 
     @PostMapping("/api/projects")
