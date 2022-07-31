@@ -1,5 +1,7 @@
 package com.example.tumblbug.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +10,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 @Entity
 @Table(name = "project")
 public class Project {
@@ -24,7 +28,7 @@ public class Project {
     private String title;
 
     @OneToMany(mappedBy = "project")
-    private List<Thumbnail> thumbnailUrls;
+    private List<Thumbnail> thumbnails;
 
     private Integer goal;
 
@@ -58,4 +62,3 @@ public class Project {
     }
 
 }
-

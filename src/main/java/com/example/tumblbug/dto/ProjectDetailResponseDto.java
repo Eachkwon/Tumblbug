@@ -17,7 +17,7 @@ public class ProjectDetailResponseDto {
 
     private String title;
 
-    private List<Thumbnail> Thumbnails;
+    private List<Thumbnail> thumbnails;
 
     private Integer goal;
 
@@ -41,7 +41,7 @@ public class ProjectDetailResponseDto {
         this.category = project.getCategory();
         this.summary = project.getSummary();
         this.title = project.getTitle();
-        this.Thumbnails = project.getThumbnailUrls();
+        this.thumbnails = project.getThumbnails();
         this.goal = project.getGoal();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
@@ -54,4 +54,5 @@ public class ProjectDetailResponseDto {
         this.totalFundingPrice = project.getTotalFundingPrice();
         this.fundingCount = project.getFundingCount();
     }
+
 }

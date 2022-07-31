@@ -22,4 +22,3 @@ public class Image {
     private Project project;
 
 }
-

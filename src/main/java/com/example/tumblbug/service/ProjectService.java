@@ -15,11 +15,10 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     // 프로젝트 상세정보 조회
-    public ProjectDetailResponseDto getProject(Long projectId) {
+    public ProjectDetailResponseDto getProjectDetail(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project " + projectId + " is not found"));
         return new ProjectDetailResponseDto(project);
     }
 
 }
-
