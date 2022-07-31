@@ -17,11 +17,5 @@ public class UserController {
         userService.signup(requestDto);
     }
 
-    // 이메일 중복확인
-    @PostMapping("/api/emailCheck")
-    public void emailCheck(@RequestBody String email) {
-        userService.emailCheck(email);
-    }
-
 }
 

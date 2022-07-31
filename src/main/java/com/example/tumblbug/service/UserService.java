@@ -42,9 +42,4 @@ public class UserService {
         userRepository.save(new User(email, name, encodedPassword));
     }
 
-    // 이메일 중복확인
-    public void emailCheck(String email) {
-        Optional<User> foundEmail = userRepository.findByEmail(email);
-        userValidator.checkEmail(foundEmail);
-    }
 }
