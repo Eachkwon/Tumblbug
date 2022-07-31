@@ -22,4 +22,3 @@ public class Thumbnail {
     private Project project;
 
 }
-
