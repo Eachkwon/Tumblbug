@@ -39,3 +39,5 @@ out/
 ### spring.datasource.properties ###
 spring.datasource.properties
 
+### cloud.aws.properties ###
+cloud.aws.properties
