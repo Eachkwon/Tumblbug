@@ -1,5 +1,6 @@
 package com.example.tumblbug.dto;
 
+import com.example.tumblbug.entity.Image;
 import com.example.tumblbug.entity.Project;
 import com.example.tumblbug.entity.Thumbnail;
 import lombok.Getter;
@@ -9,7 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class ProjectDetailResponseDto {
+public class ProjectResponseDto {
+
+    private Long projectId;
 
     private String category;
 
@@ -29,6 +32,8 @@ public class ProjectDetailResponseDto {
 
     private String plan;
 
+    private List<Image> images;
+
     private String creatorName;
 
     private String creatorBiography;
@@ -37,7 +42,8 @@ public class ProjectDetailResponseDto {
 
     private int fundingCount;
 
-    public ProjectDetailResponseDto(Project project) {
+    public ProjectResponseDto(Project project) {
+        this.projectId = project.getProjectId();
         this.category = project.getCategory();
         this.summary = project.getSummary();
         this.title = project.getTitle();
@@ -49,6 +55,7 @@ public class ProjectDetailResponseDto {
                 .map(RewardResponseDto::new)
                 .collect(Collectors.toList());
         this.plan = project.getPlan();
+        this.images = project.getImages();
         this.creatorName = project.getCreatorName();
         this.creatorBiography = project.getCreatorBiography();
         this.totalFundingPrice = project.getTotalFundingPrice();

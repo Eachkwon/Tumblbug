@@ -1,15 +1,16 @@
 package com.example.tumblbug.dto;
 
 import com.example.tumblbug.entity.Image;
-import com.example.tumblbug.entity.Reward;
 import com.example.tumblbug.entity.Thumbnail;
+import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
+@Builder
 @Getter
-public class ProjectRequesetDto {
+public class ProjectRequestDto {
 
     private String category;
 
@@ -17,15 +18,15 @@ public class ProjectRequesetDto {
 
     private String title;
 
-    private List<Thumbnail> thumbnailUrls;
+    private List<Thumbnail> thumbnails;
 
     private Integer goal;
 
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
-    private List<Reward> rewards;
+    private List<RewardRequestDto> rewards;
 
     private String plan;
 
@@ -34,9 +35,5 @@ public class ProjectRequesetDto {
     private String creatorName;
 
     private String creatorBiography;
-
-    private int totalFundingPrice;
-
-    private int fundingCount;
 
 }

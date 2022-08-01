@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,8 +79,8 @@ class FundServiceTest {
                         // .title("프로젝트 제목")
                         // .thumbnails(Collections.emptyList())
                         // .goal(1_000_000)
-                        .startDate(LocalDateTime.now().plusDays(1))
-                        .endDate(LocalDateTime.MAX)
+                        .startDate(LocalDate.now().plusDays(1))
+                        .endDate(LocalDate.MAX)
                         // .rewards(List.of(reward))
                         // .plan("프로젝트 계획")
                         // .images(Collections.emptyList())
@@ -129,8 +129,8 @@ class FundServiceTest {
                         // .title("프로젝트 제목")
                         // .thumbnails(Collections.emptyList())
                         // .goal(1_000_000)
-                        .startDate(LocalDateTime.MIN)
-                        .endDate(LocalDateTime.now().minusDays(1))
+                        .startDate(LocalDate.MIN)
+                        .endDate(LocalDate.now().minusDays(1))
                         // .rewards(List.of(reward))
                         // .plan("프로젝트 계획")
                         // .images(Collections.emptyList())
@@ -192,8 +192,8 @@ class FundServiceTest {
                         // .title("프로젝트 제목")
                         // .thumbnails(Collections.emptyList())
                         // .goal(1_000_000)
-                        .startDate(LocalDateTime.MIN)
-                        .endDate(LocalDateTime.MAX)
+                        .startDate(LocalDate.MIN)
+                        .endDate(LocalDate.MAX)
                         // .rewards(List.of(reward))
                         // .plan("프로젝트 계획")
                         // .images(Collections.emptyList())
