@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Service
@@ -31,10 +31,10 @@ public class FundService {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reward " + rewardId + " is not found"));
         Project project = reward.getProject();
-        if (LocalDateTime.now().isBefore(project.getStartDate())) {
+        if (LocalDate.now().isBefore(project.getStartDate())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "아직 펀딩을 시작하지 않았습니다");
         }
-        if (LocalDateTime.now().isAfter(project.getEndDate())) {
+        if (LocalDate.now().isAfter(project.getEndDate())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 펀딩이 종료되었습니다");
         }
         Fund fund = fundRepository.save(new Fund(user, reward));
