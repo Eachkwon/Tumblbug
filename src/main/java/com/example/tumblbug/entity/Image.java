@@ -15,11 +15,20 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageId;
 
-    private String url;
+    @Column
+    private String imgFileName;
 
-    @ManyToOne
-    @JoinColumn(name = "projectId")
-    private Project project;
 
+    private String imgUrl;
+
+//    @ManyToOne
+//    @JoinColumn(name = "projectId")
+//    private Project project;
+//
+
+    public Image(String fileName, String imgUrl) {
+        this.imgFileName = fileName;
+        this.imgUrl = imgUrl;
+    }
 }
 

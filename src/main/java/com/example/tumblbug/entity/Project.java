@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -24,8 +25,8 @@ public class Project {
 
     private String title;
 
-    @OneToMany(mappedBy = "project")
-    private List<Thumbnail> thumbnailUrls;
+    @ElementCollection
+    private List<String> thumbnailUrls = new ArrayList<>();
 
     private Integer goal;
 
@@ -38,8 +39,11 @@ public class Project {
 
     private String plan;
 
-    @OneToMany(mappedBy = "project")
-    private List<Image> images;
+//    @OneToMany(mappedBy = "project")
+//    private List<Image> images;
+
+    @ElementCollection
+    private List<String> imgUrls = new ArrayList<>();
 
     private String creatorName;
 
@@ -57,13 +61,14 @@ public class Project {
         this.category = projectRequestDto.getCategory();
         this.summary = projectRequestDto.getSummary();
         this.title = projectRequestDto.getTitle();
-        this.thumbnailUrls = projectRequestDto.getThumbnailUrls();
+//        this.thumbnailUrls = projectRequestDto.getThumbnailUrls();
         this.goal = projectRequestDto.getGoal();
         this.startDate = projectRequestDto.getStartDate();
         this.endDate = projectRequestDto.getEndDate();
         this.rewards = projectRequestDto.getRewards();
         this.plan = projectRequestDto.getPlan();
-        this.images = projectRequestDto.getImages();
+//        this.images = projectRequestDto.getImages();
+        this.imgUrls = projectRequestDto.getImgUrls();
         this.creatorName = projectRequestDto.getCreatorName();
         this.creatorBiography = projectRequestDto.getCreatorBiography();
         this.totalFundingPrice = projectRequestDto.getTotalFundingPrice();

@@ -1,13 +1,11 @@
 package com.example.tumblbug.dto;
 
 import com.example.tumblbug.entity.Project;
-import com.example.tumblbug.entity.Thumbnail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -18,8 +16,7 @@ public class AllProjectResponseDto {
     private String summary;
     private String title;
 
-
-    private List<Thumbnail> thumbnailUrls;
+//    private List<Thumbnail> thumbnailUrls;
 
     private Integer goal;
 
@@ -36,7 +33,7 @@ public class AllProjectResponseDto {
         this.category = project.getCategory();
         this.summary = project.getSummary();
         this.title = project.getTitle();
-        this.thumbnailUrls = project.getThumbnailUrls();
+//        this.thumbnailUrls = project.getThumbnailUrls();
         this.goal = project.getGoal();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
