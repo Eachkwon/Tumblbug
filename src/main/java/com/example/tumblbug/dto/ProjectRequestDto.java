@@ -1,7 +1,5 @@
 package com.example.tumblbug.dto;
 
-import com.example.tumblbug.entity.Image;
-import com.example.tumblbug.entity.Thumbnail;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +16,7 @@ public class ProjectRequestDto {
 
     private String title;
 
-    private List<Thumbnail> thumbnails;
+    private List<String> thumbnails;
 
     private Integer goal;
 
@@ -30,7 +28,7 @@ public class ProjectRequestDto {
 
     private String plan;
 
-    private List<Image> images;
+    private List<String> images;
 
     private String creatorName;
 

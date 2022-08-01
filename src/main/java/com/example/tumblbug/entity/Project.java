@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,8 +30,8 @@ public class Project {
 
     private String title;
 
-    @OneToMany(mappedBy = "project")
-    private List<Thumbnail> thumbnails;
+    @ElementCollection
+    private List<String> thumbnails = new ArrayList<>();
 
     private Integer goal;
 
@@ -43,8 +44,8 @@ public class Project {
 
     private String plan;
 
-    @OneToMany(mappedBy = "project")
-    private List<Image> images;
+    @ElementCollection
+    private List<String> images = new ArrayList<>();
 
     private String creatorName;
 

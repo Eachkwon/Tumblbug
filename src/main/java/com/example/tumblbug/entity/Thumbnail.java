@@ -13,12 +13,20 @@ public class Thumbnail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long thumbnailId;
+    private Long imageId;
 
-    private String url;
+    @Column
+    private String imgFileName;
 
-    @ManyToOne
-    @JoinColumn(name = "projectId")
-    private Project project;
 
+    private String imgUrl;
+
+//    @ManyToOne
+//    @JoinColumn(name = "projectId")
+//    private Project project;
+
+    public Thumbnail(String fileName, String imgUrl) {
+        this.imgFileName = fileName;
+        this.imgUrl = imgUrl;
+    }
 }
