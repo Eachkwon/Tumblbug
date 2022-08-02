@@ -16,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -32,8 +35,52 @@ public class ProjectService {
     private final ImageRepository imageRepository;
 
     // 프로젝트 리스트 조회
-    public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category) {
-        List<Project> projects = projectRepository.findAllByCategory(category);
+    public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category, String sort) {
+        Set<String> categories = new HashSet<>(Arrays.asList("all", "game", "fashion", "culture", "pet", "beauty"));
+        Set<String> sorts = new HashSet<>(Arrays.asList("popular", "publishedAt", "amount", "endedAt"));
+
+        if (!categories.contains(category)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "category 값이 유효하지 않습니다");
+        }
+        if (!sorts.contains(sort)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "sort 값이 유효하지 않습니다");
+        }
+
+        List<Project> projects = null;
+        if (category.equals("all")) {
+            switch (sort) {
+                case "popular":
+                    projects = projectRepository.findAllByOrderByFundingCountDesc();
+                    break;
+                case "publishedAt":
+                    projects = projectRepository.findAllByOrderByStartDateDesc();
+                    break;
+                case "amount":
+                    projects = projectRepository.findAllByOrderByTotalFundingPriceDesc();
+                    break;
+                case "endedAt":
+                    projects = projectRepository.findAllByOrderByEndDateAsc();
+                    break;
+            }
+        } else {
+            switch (sort) {
+                case "popular":
+                    projects = projectRepository.findAllByCategoryOrderByFundingCountDesc(category);
+                    break;
+                case "publishedAt":
+                    projects = projectRepository.findAllByCategoryOrderByStartDateDesc(category);
+                    break;
+                case "amount":
+                    projects = projectRepository.findAllByCategoryOrderByTotalFundingPriceDesc(category);
+                    break;
+                case "endedAt":
+                    projects = projectRepository.findAllByCategoryOrderByEndDateAsc(category);
+                    break;
+            }
+        }
+        if (projects == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "프로젝트 목록을 조회하는데 실패하였습니다");
+        }
         return projects.stream()
                 .map(ProjectsByCategoryResponseDto::new)
                 .collect(Collectors.toList());

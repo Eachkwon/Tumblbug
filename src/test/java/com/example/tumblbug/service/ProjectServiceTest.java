@@ -60,6 +60,8 @@ class ProjectServiceTest {
                 // given
                 String category = "game";
 
+                String sort = "publishedAt";
+
                 List<Project> projects = new ArrayList<>();
 
                 Project project = Project.builder()
@@ -79,11 +81,11 @@ class ProjectServiceTest {
 
                 ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository, imageRepository);
 
-                when(projectRepository.findAllByCategory(category))
+                when(projectRepository.findAllByCategoryOrderByStartDateDesc(category))
                         .thenReturn(projects);
 
                 // when
-                List<ProjectsByCategoryResponseDto> projectsByCategoryResponseDtos = projectService.getProjectsByCategory(category);
+                List<ProjectsByCategoryResponseDto> projectsByCategoryResponseDtos = projectService.getProjectsByCategory(category, sort);
 
                 // then
                 for (ProjectsByCategoryResponseDto projectsByCategoryResponseDto : projectsByCategoryResponseDtos) {
