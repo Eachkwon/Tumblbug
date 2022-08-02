@@ -31,7 +31,7 @@ public class ProjectController {
 
     // 프로젝트 생성
     @PostMapping("/api/projects")
-    public void postProject(@RequestBody @Valid ProjectRequestDto projectRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void postProject(@RequestBody ProjectRequestDto projectRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         projectService.createProject(projectRequestDto, userDetails.getUser());
     }
 
