@@ -1,7 +1,7 @@
 package com.example.tumblbug.controller;
 
 import com.example.tumblbug.dto.FundResponseDto;
-import com.example.tumblbug.dto.RewardResponseDto;
+import com.example.tumblbug.dto.MyFundigHistoryResponeseDto;
 import com.example.tumblbug.security.UserDetailsImpl;
 import com.example.tumblbug.service.MyPageService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class MyPageController {
     }
 
     @GetMapping("api/mypage/{fundId}")
-    public RewardResponseDto getMyFundingHistory(@PathVariable Long fundId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public MyFundigHistoryResponeseDto getMyFundingHistory(@PathVariable Long fundId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getUserId();
         return myPageService.getMyFundingHistory(fundId, userId);
     }

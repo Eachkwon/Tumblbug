@@ -1,9 +1,8 @@
 package com.example.tumblbug.service;
 
 import com.example.tumblbug.dto.FundResponseDto;
-import com.example.tumblbug.dto.RewardResponseDto;
+import com.example.tumblbug.dto.MyFundigHistoryResponeseDto;
 import com.example.tumblbug.entity.Fund;
-import com.example.tumblbug.entity.Reward;
 import com.example.tumblbug.repository.FundRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +22,10 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-    public RewardResponseDto getMyFundingHistory(Long userId, Long fundId) {
+
+    public MyFundigHistoryResponeseDto getMyFundingHistory(Long userId, Long fundId) {
         Fund fund = fundRepository.findFundByUserAndFundId(userId, fundId);
-        Reward reward = fund.getReward();
-        RewardResponseDto rewardResponseDto = new RewardResponseDto(reward);
-        return rewardResponseDto;
+        MyFundigHistoryResponeseDto myFundigHistoryResponeseDto = new MyFundigHistoryResponeseDto(fund);
+        return myFundigHistoryResponeseDto;
     }
 }
