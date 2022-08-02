@@ -1,6 +1,8 @@
 package com.example.tumblbug.dto;
 
+import com.example.tumblbug.entity.Image;
 import com.example.tumblbug.entity.Project;
+import com.example.tumblbug.entity.Thumbnail;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -45,7 +47,9 @@ public class ProjectResponseDto {
         this.category = project.getCategory();
         this.summary = project.getSummary();
         this.title = project.getTitle();
-        this.thumbnails = project.getThumbnails();
+        this.thumbnails = project.getThumbnails().stream()
+                .map(Thumbnail::getUrl)
+                .collect(Collectors.toList());
         this.goal = project.getGoal();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
@@ -53,7 +57,9 @@ public class ProjectResponseDto {
                 .map(RewardResponseDto::new)
                 .collect(Collectors.toList());
         this.plan = project.getPlan();
-        this.images = project.getImages();
+        this.images = project.getImages().stream()
+                .map(Image::getUrl)
+                .collect(Collectors.toList());
         this.creatorName = project.getCreatorName();
         this.creatorBiography = project.getCreatorBiography();
         this.totalFundingPrice = project.getTotalFundingPrice();
