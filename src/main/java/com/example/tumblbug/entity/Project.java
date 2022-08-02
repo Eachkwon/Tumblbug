@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,8 @@ public class Project {
 
     private String title;
 
-    @ElementCollection
-    private List<String> thumbnails = new ArrayList<>();
+    @OneToMany(mappedBy = "project")
+    private List<Thumbnail> thumbnails;
 
     private Integer goal;
 
@@ -44,8 +43,8 @@ public class Project {
 
     private String plan;
 
-    @ElementCollection
-    private List<String> images = new ArrayList<>();
+    @OneToMany(mappedBy = "project")
+    private List<Image> images;
 
     private String creatorName;
 
@@ -63,7 +62,9 @@ public class Project {
         this.category = projectRequestDto.getCategory();
         this.summary = projectRequestDto.getSummary();
         this.title = projectRequestDto.getTitle();
-        this.thumbnails = projectRequestDto.getThumbnails();
+        this.thumbnails = projectRequestDto.getThumbnails().stream()
+                .map((thumbnail) -> new Thumbnail(thumbnail, this))
+                .collect(Collectors.toList());
         this.goal = projectRequestDto.getGoal();
         this.startDate = projectRequestDto.getStartDate();
         this.endDate = projectRequestDto.getEndDate();
@@ -71,7 +72,9 @@ public class Project {
                 .map((rewardRequestDto) -> new Reward(rewardRequestDto, this))
                 .collect(Collectors.toList());
         this.plan = projectRequestDto.getPlan();
-        this.images = projectRequestDto.getImages();
+        this.images = projectRequestDto.getImages().stream()
+                .map((image) -> new Image(image, this))
+                .collect(Collectors.toList());
         this.creatorName = projectRequestDto.getCreatorName();
         this.creatorBiography = projectRequestDto.getCreatorBiography();
         this.totalFundingPrice = 0;
