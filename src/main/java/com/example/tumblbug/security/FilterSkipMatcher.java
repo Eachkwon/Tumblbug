@@ -28,7 +28,7 @@ public class FilterSkipMatcher implements RequestMatcher {
         String[] splitStr = skipPath.split(",");
 
         /*
-         * 배열 [1] httpMathod 방식 post get 인지 구분
+         * 배열 [1] httpMethod 방식 post get 인지 구분
          * 배열 [0] 제외하는 url
          * */
         return new AntPathRequestMatcher(
