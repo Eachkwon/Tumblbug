@@ -41,7 +41,7 @@ public class ProjectDetailResponseDto {
         this.category = project.getCategory();
         this.summary = project.getSummary();
         this.title = project.getTitle();
-//        this.thumbnails = project.getThumbnails();
+        this.thumbnails = project.getThumbnails();
         this.goal = project.getGoal();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
