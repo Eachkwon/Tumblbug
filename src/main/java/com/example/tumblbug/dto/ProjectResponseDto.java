@@ -29,7 +29,7 @@ public class ProjectResponseDto {
     private List<RewardResponseDto> rewards;
 
     private String plan;
-
+    
     private List<String> images;
 
     private String creatorName;
