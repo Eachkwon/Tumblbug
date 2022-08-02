@@ -1,5 +1,6 @@
 package com.example.tumblbug.entity;
 
+import com.example.tumblbug.dto.ImageRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,19 +16,18 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageId;
 
-    @Column
-    private String imgFileName;
+    private String url;
 
+    private String filename;
 
-    private String imgUrl;
+    @ManyToOne
+    @JoinColumn(name = "projectId")
+    private Project project;
 
-//    @ManyToOne
-//    @JoinColumn(name = "projectId")
-//    private Project project;
-//
-
-    public Image(String fileName, String imgUrl) {
-        this.imgFileName = fileName;
-        this.imgUrl = imgUrl;
+    public Image(ImageRequestDto imageRequestDto, Project project) {
+        this.url = imageRequestDto.getUrl();
+        this.filename = imageRequestDto.getFilename();
+        this.project = project;
     }
+
 }

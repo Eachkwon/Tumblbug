@@ -16,7 +16,7 @@ public class ProjectRequestDto {
 
     private String title;
 
-    private List<String> thumbnails;
+    private List<ImageRequestDto> thumbnails;
 
     private Integer goal;
 
@@ -28,7 +28,7 @@ public class ProjectRequestDto {
 
     private String plan;
 
-    private List<String> images;
+    private List<ImageRequestDto> images;
 
     private String creatorName;
 
