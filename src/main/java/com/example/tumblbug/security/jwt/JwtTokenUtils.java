@@ -3,8 +3,6 @@ package com.example.tumblbug.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.tumblbug.security.UserDetailsImpl;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 

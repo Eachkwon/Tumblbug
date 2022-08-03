@@ -13,14 +13,14 @@ public class UserValidator {
     //이메일 중복확인
     public void checkEmail(Optional<User> foundEmail) {
         if (foundEmail.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, foundEmail + "is already registered");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다.");
         }
     }
 
     //비밀번호 중복확인
     public void confirmPassword(String password, String confirmPassword) {
         if (!password.equals(confirmPassword)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password confirmation does not match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
     }
 
