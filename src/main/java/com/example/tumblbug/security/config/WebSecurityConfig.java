@@ -63,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/favicon.ico")
                 .antMatchers("/v2/api-docs", "/configuration/ui",
                         "/swagger-resources", "/configuration/security",
-                        "/swagger-ui.html", "/webjars/**", "/swagger/**")
+                        "/swagger-ui.html", "/webjars/**", "/swagger/**, " ,
+                                "/oauth2Login()", "/v2/**", "/oauth/**")
                 .antMatchers("/h2-console/**");
     }
 
