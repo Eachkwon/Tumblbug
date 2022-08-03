@@ -7,6 +7,20 @@ import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    List<Project> findAllByCategory(String category);
+    List<Project> findAllByOrderByFundingCountDesc();
+
+    List<Project> findAllByOrderByStartDateDesc();
+
+    List<Project> findAllByOrderByTotalFundingPriceDesc();
+
+    List<Project> findAllByOrderByEndDateAsc();
+
+    List<Project> findAllByCategoryOrderByFundingCountDesc(String category);
+
+    List<Project> findAllByCategoryOrderByStartDateDesc(String category);
+
+    List<Project> findAllByCategoryOrderByTotalFundingPriceDesc(String category);
+
+    List<Project> findAllByCategoryOrderByEndDateAsc(String category);
 
 }

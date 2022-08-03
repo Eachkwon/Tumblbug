@@ -44,10 +44,45 @@ class ProjectServiceTest {
     @DisplayName("프로젝트 리스트 조회")
     class GetAllProjects {
 
-//        @Nested
-//        @DisplayName("실패")
-//        class Fail {
-//        }
+        @Nested
+        @DisplayName("실패")
+        class Fail {
+
+            @Test
+            @DisplayName("유효하지않은 카테고리")
+            void invalid_category() {
+                // given
+                String category = "publishedAt";
+
+                String sort = "publishedAt";
+
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository, imageRepository);
+
+                // when
+                Exception exception = assertThrows(ResponseStatusException.class, () -> projectService.getProjectsByCategory(category, sort));
+
+                // then
+                assertEquals("400 BAD_REQUEST \"category 값이 유효하지 않습니다\"", exception.getMessage());
+            }
+
+            @Test
+            @DisplayName("유효하지않은 정렬")
+            void invalid_sort() {
+                // given
+                String category = "game";
+
+                String sort = "game";
+
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository, imageRepository);
+
+                // when
+                Exception exception = assertThrows(ResponseStatusException.class, () -> projectService.getProjectsByCategory(category, sort));
+
+                // then
+                assertEquals("400 BAD_REQUEST \"sort 값이 유효하지 않습니다\"", exception.getMessage());
+            }
+
+        }
 
         @Nested
         @DisplayName("성공")
@@ -59,6 +94,8 @@ class ProjectServiceTest {
                 // given
                 String category = "game";
 
+                String sort = "publishedAt";
+
                 List<Project> projects = new ArrayList<>();
 
                 Project project = Project.builder()
@@ -68,21 +105,22 @@ class ProjectServiceTest {
                         // .title("프로젝트 제목")
                         .thumbnails(Collections.emptyList())
                         // .goal(1_000_000)
-                        // .startDate(LocalDate.of(2022, 8, 1))
-                        // .endDate(LocalDate.of(2022, 8, 5))
+                        .startDate(LocalDate.of(2022, 8, 1))
+                        .endDate(LocalDate.of(2022, 8, 5))
                         // .creatorName("홍길동")
-                        // .totalFundingPrice(500_000)
+                        .totalFundingPrice(500_000)
+                        .fundingCount(25)
                         .build();
 
                 projects.add(project);
 
                 ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository);
 
-                when(projectRepository.findAllByCategory(category))
+                when(projectRepository.findAllByCategoryOrderByStartDateDesc(category))
                         .thenReturn(projects);
 
                 // when
-                List<ProjectsByCategoryResponseDto> projectsByCategoryResponseDtos = projectService.getProjectsByCategory(category);
+                List<ProjectsByCategoryResponseDto> projectsByCategoryResponseDtos = projectService.getProjectsByCategory(category, sort);
 
                 // then
                 for (ProjectsByCategoryResponseDto projectsByCategoryResponseDto : projectsByCategoryResponseDtos) {
