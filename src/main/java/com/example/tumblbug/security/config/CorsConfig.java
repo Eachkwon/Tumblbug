@@ -18,6 +18,8 @@ public class CorsConfig {
         config.addAllowedOrigin("https://s3.ap-northeast-2.amazonaws.com/applesong");
         config.addAllowedOrigin("http://localhost:3000");// 모든 ip에 응답을 허용하겠다. * -> http://localhost:3000
         config.addAllowedOrigin("http://localhost:8080");
+        config.addAllowedOrigin("https://kauth.kakao.com/oauth/token");
+        config.addAllowedOrigin("https://kapi.kakao.com/v2/user/me");
         config.addAllowedHeader("*");//모든 header에 응답을 허용하겠다.
 
 

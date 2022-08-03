@@ -1,7 +1,7 @@
 package com.example.tumblbug.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.example.tumblbug.config.AwsS3Config;
+import com.example.tumblbug.security.config.AwsS3Config;
 import com.example.tumblbug.dto.UploadResponseDto;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
