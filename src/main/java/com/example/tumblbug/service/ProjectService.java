@@ -32,7 +32,7 @@ public class ProjectService {
     private final ThumbnailRepository thumbnailRepository;
 
     // 프로젝트 리스트 조회
-    public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category, String sort) {
+    public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category, String sort, String query) {
         Set<String> categories = new HashSet<>(Arrays.asList("all", "game", "fashion", "culture", "pet", "beauty"));
         Set<String> sorts = new HashSet<>(Arrays.asList("popular", "publishedAt", "amount", "endedAt"));
 
@@ -47,31 +47,31 @@ public class ProjectService {
         if (category.equals("all")) {
             switch (sort) {
                 case "popular":
-                    projects = projectRepository.findAllByOrderByFundingCountDesc();
+                    projects = projectRepository.findAllByTitleContainingOrderByFundingCountDesc(query);
                     break;
                 case "publishedAt":
-                    projects = projectRepository.findAllByOrderByStartDateDesc();
+                    projects = projectRepository.findAllByTitleContainingOrderByStartDateDesc(query);
                     break;
                 case "amount":
-                    projects = projectRepository.findAllByOrderByTotalFundingPriceDesc();
+                    projects = projectRepository.findAllByTitleContainingOrderByTotalFundingPriceDesc(query);
                     break;
                 case "endedAt":
-                    projects = projectRepository.findAllByOrderByEndDateAsc();
+                    projects = projectRepository.findAllByTitleContainingOrderByEndDateAsc(query);
                     break;
             }
         } else {
             switch (sort) {
                 case "popular":
-                    projects = projectRepository.findAllByCategoryOrderByFundingCountDesc(category);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByFundingCountDesc(category, query);
                     break;
                 case "publishedAt":
-                    projects = projectRepository.findAllByCategoryOrderByStartDateDesc(category);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByStartDateDesc(category, query);
                     break;
                 case "amount":
-                    projects = projectRepository.findAllByCategoryOrderByTotalFundingPriceDesc(category);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByTotalFundingPriceDesc(category, query);
                     break;
                 case "endedAt":
-                    projects = projectRepository.findAllByCategoryOrderByEndDateAsc(category);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByEndDateAsc(category, query);
                     break;
             }
         }
