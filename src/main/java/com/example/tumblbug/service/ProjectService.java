@@ -6,7 +6,6 @@ import com.example.tumblbug.dto.ProjectResponseDto;
 import com.example.tumblbug.dto.ProjectsByCategoryResponseDto;
 import com.example.tumblbug.entity.Project;
 import com.example.tumblbug.entity.User;
-import com.example.tumblbug.repository.ImageRepository;
 import com.example.tumblbug.repository.ProjectRepository;
 import com.example.tumblbug.repository.RewardRepository;
 import com.example.tumblbug.repository.ThumbnailRepository;
@@ -31,8 +30,6 @@ public class ProjectService {
     private final RewardRepository rewardRepository;
 
     private final ThumbnailRepository thumbnailRepository;
-
-    private final ImageRepository imageRepository;
 
     // 프로젝트 리스트 조회
     public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category, String sort) {
@@ -78,9 +75,11 @@ public class ProjectService {
                     break;
             }
         }
+
         if (projects == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "프로젝트 목록을 조회하는데 실패하였습니다");
         }
+
         return projects.stream()
                 .map(ProjectsByCategoryResponseDto::new)
                 .collect(Collectors.toList());
@@ -99,7 +98,6 @@ public class ProjectService {
         Project project = projectRepository.save(new Project(projectRequestDto, user));
         rewardRepository.saveAll(project.getRewards());
         thumbnailRepository.saveAll(project.getThumbnails());
-        imageRepository.saveAll(project.getImages());
         return new ProjectResponseDto(project);
     }
 

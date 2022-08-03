@@ -49,7 +49,6 @@ public class AwsS3ServiceTest {
         // then
         assertNotNull(amazonS3.getObject(bucket, uploadResponseDto.getFilename()));
 
-        System.out.println("uploadResponseDto.getFilename() = " + uploadResponseDto.getFilename());
         filenames.add(uploadResponseDto.getFilename());
     }
 
@@ -58,9 +57,6 @@ public class AwsS3ServiceTest {
     @DisplayName("업로드한 이미지 삭제")
     void delete_image() {
         // given
-        for (String filename : filenames) {
-            System.out.println("filename = " + filename);
-        }
 
         // when
         List<String> deletedFilenames = awsS3Service.deleteImages(filenames);
