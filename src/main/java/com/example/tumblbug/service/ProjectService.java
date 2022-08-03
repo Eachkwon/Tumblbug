@@ -6,7 +6,6 @@ import com.example.tumblbug.dto.ProjectResponseDto;
 import com.example.tumblbug.dto.ProjectsByCategoryResponseDto;
 import com.example.tumblbug.entity.Project;
 import com.example.tumblbug.entity.User;
-import com.example.tumblbug.repository.ImageRepository;
 import com.example.tumblbug.repository.ProjectRepository;
 import com.example.tumblbug.repository.RewardRepository;
 import com.example.tumblbug.repository.ThumbnailRepository;
@@ -29,11 +28,9 @@ public class ProjectService {
 
     private final ThumbnailRepository thumbnailRepository;
 
-    private final ImageRepository imageRepository;
-
     // 프로젝트 리스트 조회
     public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category) {
-        List<Project> projects = projectRepository.findAllByCategory(category);
+        List<Project> projects = category.equals("all") ? projectRepository.findAll() : projectRepository.findAllByCategory(category);
         return projects.stream()
                 .map(ProjectsByCategoryResponseDto::new)
                 .collect(Collectors.toList());
@@ -52,7 +49,6 @@ public class ProjectService {
         Project project = projectRepository.save(new Project(projectRequestDto, user));
         rewardRepository.saveAll(project.getRewards());
         thumbnailRepository.saveAll(project.getThumbnails());
-        imageRepository.saveAll(project.getImages());
         return new ProjectResponseDto(project);
     }
 
