@@ -19,8 +19,11 @@ public class ProjectController {
 
     // 프로젝트 리스트 조회
     @GetMapping("/api/projects")
-    public List<ProjectsByCategoryResponseDto> getProjects(@RequestParam String category, @RequestParam String sort) {
-        return projectService.getProjectsByCategory(category, sort);
+    public List<ProjectsByCategoryResponseDto> getProjects(
+            @RequestParam(defaultValue = "all") String category,
+            @RequestParam(defaultValue = "popular") String sort,
+            @RequestParam(defaultValue = "") String query) {
+        return projectService.getProjectsByCategory(category, sort, query);
     }
 
     // 프로젝트 상세정보 조회
