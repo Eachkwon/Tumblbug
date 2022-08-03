@@ -28,8 +28,6 @@ public class ProjectRequestDto {
 
     private String plan;
 
-    private List<ImageRequestDto> images;
-
     private String creatorName;
 
     private String creatorBiography;
