@@ -63,8 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/favicon.ico")
                 .antMatchers("/v2/api-docs", "/configuration/ui",
                         "/swagger-resources", "/configuration/security",
-                        "/swagger-ui.html", "/webjars/**", "/swagger/**, " ,
-                                "/oauth2Login()", "/v2/**", "/oauth/**")
+                        "/swagger-ui.html", "/webjars/**", "/swagger/**, ",
+                        "/oauth2Login()", "/v2/**", "/oauth/**")
                 .antMatchers("/h2-console/**");
     }
 
@@ -147,6 +147,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/webjars/**");
 
         skipPathList.add("GET,/favicon.ico");
+
+        skipPathList.add("POST,/error");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
