@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.tumblbug.service.ProjectService.ValidDate.vaildStartAndEndDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -74,6 +76,8 @@ public class Project {
         this.totalFundingPrice = 0;
         this.fundingCount = 0;
         this.user = user;
+        vaildStartAndEndDate(startDate, endDate);
+
     }
 
     public void addFund(Reward reward) {
