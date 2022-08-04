@@ -33,7 +33,7 @@ public class JwtAuthProvider implements AuthenticationProvider {
         //  ex) UserDetailsImpl 에 userId, username, role 만 저장
         //    -> JWT 에 userId, username, role 정보를 암호화/복호화하여 사용
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Can't find " + email));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하지 않는 이메일입니다."));
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }

@@ -1,8 +1,10 @@
 package com.example.tumblbug.service;
 
 import com.example.tumblbug.dto.*;
-import com.example.tumblbug.entity.*;
-import com.example.tumblbug.repository.ImageRepository;
+import com.example.tumblbug.entity.Project;
+import com.example.tumblbug.entity.Reward;
+import com.example.tumblbug.entity.Thumbnail;
+import com.example.tumblbug.entity.User;
 import com.example.tumblbug.repository.ProjectRepository;
 import com.example.tumblbug.repository.RewardRepository;
 import com.example.tumblbug.repository.ThumbnailRepository;
@@ -38,17 +40,49 @@ class ProjectServiceTest {
     @Mock
     ThumbnailRepository thumbnailRepository;
 
-    @Mock
-    ImageRepository imageRepository;
-
     @Nested
     @DisplayName("프로젝트 리스트 조회")
     class GetAllProjects {
 
-//        @Nested
-//        @DisplayName("실패")
-//        class Fail {
-//        }
+        @Nested
+        @DisplayName("실패")
+        class Fail {
+
+            @Test
+            @DisplayName("유효하지않은 카테고리")
+            void invalid_category() {
+                // given
+                String category = "publishedAt";
+
+                String sort = "publishedAt";
+
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository);
+
+                // when
+                Exception exception = assertThrows(ResponseStatusException.class, () -> projectService.getProjectsByCategory(category, sort, ""));
+
+                // then
+                assertEquals("400 BAD_REQUEST \"category 값이 유효하지 않습니다\"", exception.getMessage());
+            }
+
+            @Test
+            @DisplayName("유효하지않은 정렬")
+            void invalid_sort() {
+                // given
+                String category = "game";
+
+                String sort = "game";
+
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository);
+
+                // when
+                Exception exception = assertThrows(ResponseStatusException.class, () -> projectService.getProjectsByCategory(category, sort, ""));
+
+                // then
+                assertEquals("400 BAD_REQUEST \"sort 값이 유효하지 않습니다\"", exception.getMessage());
+            }
+
+        }
 
         @Nested
         @DisplayName("성공")
@@ -60,6 +94,10 @@ class ProjectServiceTest {
                 // given
                 String category = "game";
 
+                String sort = "publishedAt";
+
+                String query = "";
+
                 List<Project> projects = new ArrayList<>();
 
                 Project project = Project.builder()
@@ -69,21 +107,22 @@ class ProjectServiceTest {
                         // .title("프로젝트 제목")
                         .thumbnails(Collections.emptyList())
                         // .goal(1_000_000)
-                        // .startDate(LocalDate.of(2022, 8, 1))
-                        // .endDate(LocalDate.of(2022, 8, 5))
+                        .startDate(LocalDate.of(2022, 8, 1))
+                        .endDate(LocalDate.of(2022, 8, 5))
                         // .creatorName("홍길동")
-                        // .totalFundingPrice(500_000)
+                        .totalFundingPrice(500_000)
+                        .fundingCount(25)
                         .build();
 
                 projects.add(project);
 
-                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository, imageRepository);
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository);
 
-                when(projectRepository.findAllByCategory(category))
+                when(projectRepository.findAllByCategoryAndTitleContainingOrderByStartDateDesc(category, query))
                         .thenReturn(projects);
 
                 // when
-                List<ProjectsByCategoryResponseDto> projectsByCategoryResponseDtos = projectService.getProjectsByCategory(category);
+                List<ProjectsByCategoryResponseDto> projectsByCategoryResponseDtos = projectService.getProjectsByCategory(category, sort, query);
 
                 // then
                 for (ProjectsByCategoryResponseDto projectsByCategoryResponseDto : projectsByCategoryResponseDtos) {
@@ -109,7 +148,7 @@ class ProjectServiceTest {
                 // given
                 Long projectId = -1L;
 
-                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository, imageRepository);
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository);
 
                 when(projectRepository.findById(projectId))
                         .thenReturn(Optional.empty());
@@ -144,7 +183,6 @@ class ProjectServiceTest {
                         .endDate(LocalDate.of(2022, 8, 5))
                         .rewards(Collections.emptyList())
                         .plan("프로젝트 계획")
-                        // .images(Collections.emptyList())
                         .creatorName("홍길동")
                         .creatorBiography("안녕하세요. 홍길동입니다.")
                         .totalFundingPrice(500_000)
@@ -152,7 +190,7 @@ class ProjectServiceTest {
                         // user(user)
                         .build();
 
-                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository, imageRepository);
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository);
 
                 when(projectRepository.findById(projectId))
                         .thenReturn(Optional.of(project));
@@ -209,7 +247,6 @@ class ProjectServiceTest {
                 LocalDate endDate = LocalDate.from(startDate).plusDays(6);
                 List<RewardRequestDto> rewardRequestDtos = Collections.emptyList();
                 String plan = "프로젝트 계획";
-                List<ImageRequestDto> imageRequestDtos = Collections.emptyList();
                 String creatorName = "홍길동";
                 String creatorBiography = "안녕하세요. 홍길동입니다.";
 
@@ -223,7 +260,6 @@ class ProjectServiceTest {
                         .endDate(endDate)
                         .rewards(rewardRequestDtos)
                         .plan(plan)
-                        .images(imageRequestDtos)
                         .creatorName(creatorName)
                         .creatorBiography(creatorBiography)
                         .build();
@@ -238,20 +274,17 @@ class ProjectServiceTest {
 
                 List<Reward> rewards = rewardRequestDtos.stream().map((rewardRequestDto) -> new Reward(rewardRequestDto, null)).collect(Collectors.toList());
 
-                List<Image> images = imageRequestDtos.stream().map((imageRequestDto) -> new Image(imageRequestDto, null)).collect(Collectors.toList());
-
                 Project savedProject = Project.builder()
                         .projectId(projectId)
                         .category(category)
                         .summary(summary)
                         .title(title)
-//                        .thumbnails(thumbnails)
+                        .thumbnails(thumbnails)
                         .goal(goal)
                         .startDate(startDate)
                         .endDate(endDate)
                         .rewards(rewards)
                         .plan(plan)
-//                        .images(images)
                         .creatorName(creatorName)
                         .creatorBiography(creatorBiography)
                         .totalFundingPrice(0)
@@ -259,7 +292,7 @@ class ProjectServiceTest {
                         // user(user)
                         .build();
 
-                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository, imageRepository);
+                ProjectService projectService = new ProjectService(projectRepository, rewardRepository, thumbnailRepository);
 
                 when(projectRepository.save(any(Project.class)))
                         .thenReturn(savedProject);
@@ -272,13 +305,12 @@ class ProjectServiceTest {
                 assertEquals(category, projectResponseDto.getCategory());
                 assertEquals(summary, projectResponseDto.getSummary());
                 assertEquals(title, projectResponseDto.getTitle());
-                // assertEquals(thumbnails, projectResponseDto.getThumbnails());
+                assertEquals(thumbnails.stream().map(Thumbnail::getUrl).collect(Collectors.toList()), projectResponseDto.getThumbnails());
                 assertEquals(goal, projectResponseDto.getGoal());
                 assertEquals(startDate, projectResponseDto.getStartDate());
                 assertEquals(endDate, projectResponseDto.getEndDate());
                 assertEquals(rewards.stream().map(RewardResponseDto::new).collect(Collectors.toList()), projectResponseDto.getRewards());
                 assertEquals(plan, projectResponseDto.getPlan());
-                // assertEquals(images, projectResponseDto.getImages());
                 assertEquals(creatorName, projectResponseDto.getCreatorName());
                 assertEquals(creatorBiography, projectResponseDto.getCreatorBiography());
                 assertEquals(0, projectResponseDto.getTotalFundingPrice());

@@ -1,4 +1,4 @@
-package com.example.tumblbug.config;
+package com.example.tumblbug.security.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

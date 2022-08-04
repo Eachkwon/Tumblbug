@@ -1,5 +1,7 @@
-package com.example.tumblbug.security;
+package com.example.tumblbug.security.config;
 
+import com.example.tumblbug.security.FilterSkipMatcher;
+import com.example.tumblbug.security.FormLoginSuccessHandler;
 import com.example.tumblbug.security.filter.FormLoginFilter;
 import com.example.tumblbug.security.filter.JwtAuthFilter;
 import com.example.tumblbug.security.jwt.HeaderTokenExtractor;
@@ -61,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/favicon.ico")
                 .antMatchers("/v2/api-docs", "/configuration/ui",
                         "/swagger-resources", "/configuration/security",
-                        "/swagger-ui.html", "/webjars/**", "/swagger/**")
+                        "/swagger-ui.html", "/webjars/**", "/swagger/**, ",
+                        "/oauth2Login()", "/v2/**", "/oauth/**")
                 .antMatchers("/h2-console/**");
     }
 
@@ -136,14 +139,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("POST,/api/signup");
         skipPathList.add("POST,/api/emailCheck");
         // 조회 API 허용
-        skipPathList.add("GET,/api/**");
-        skipPathList.add("GET,/**");
+        skipPathList.add("GET,/kakao/**");
+        skipPathList.add("GET,/api/projects/**");
+//        // 카카오 로그인 허용
+//        skipPathList.add("POST,https://kauth.kakao.com/oauth/token");
+//        skipPathList.add("POST,https://kapi.kakao.com/v2/user/me");
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");
         skipPathList.add("GET,/webjars/**");
 
         skipPathList.add("GET,/favicon.ico");
+
+        skipPathList.add("POST,/error");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,

@@ -23,6 +23,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // 카카오 아이디
+    @Column(unique = true)
+    private Long kakaoId;
+
     //이름 (e.g. 홍길동)
     @Column(nullable = false)
     private String name;
@@ -35,6 +39,14 @@ public class User {
         this.email = email;
         this.name = name;
         this.password = password;
+        this.kakaoId = null;
+    }
+
+    public User(String email, String name, String password, Long kakaoId ) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.kakaoId = kakaoId;
     }
 
 }

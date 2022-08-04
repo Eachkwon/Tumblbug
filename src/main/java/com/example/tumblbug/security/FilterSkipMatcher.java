@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class FilterSkipMatcher implements RequestMatcher {
 
     private final OrRequestMatcher orRequestMatcher;
-    private final RequestMatcher   processingMatcher;
+    private final RequestMatcher processingMatcher;
 
     public FilterSkipMatcher(
             List<String> pathToSkip,
@@ -19,7 +19,7 @@ public class FilterSkipMatcher implements RequestMatcher {
     ) {
         this.orRequestMatcher = new OrRequestMatcher(pathToSkip
                 .stream()
-                .map(this :: httpPath)
+                .map(this::httpPath)
                 .collect(Collectors.toList()));
         this.processingMatcher = new AntPathRequestMatcher(processingPath);
     }
@@ -28,7 +28,7 @@ public class FilterSkipMatcher implements RequestMatcher {
         String[] splitStr = skipPath.split(",");
 
         /*
-         * 배열 [1] httpMathod 방식 post get 인지 구분
+         * 배열 [1] httpMethod 방식 post get 인지 구분
          * 배열 [0] 제외하는 url
          * */
         return new AntPathRequestMatcher(

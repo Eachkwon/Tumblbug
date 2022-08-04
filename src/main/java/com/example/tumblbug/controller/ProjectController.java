@@ -19,8 +19,11 @@ public class ProjectController {
 
     // 프로젝트 리스트 조회
     @GetMapping("/api/projects")
-    public List<ProjectsByCategoryResponseDto> getProjects(@RequestParam String category) {
-        return projectService.getProjectsByCategory(category);
+    public List<ProjectsByCategoryResponseDto> getProjects(
+            @RequestParam(defaultValue = "all") String category,
+            @RequestParam(defaultValue = "popular") String sort,
+            @RequestParam(defaultValue = "") String query) {
+        return projectService.getProjectsByCategory(category, sort, query);
     }
 
     // 프로젝트 상세정보 조회
@@ -31,7 +34,7 @@ public class ProjectController {
 
     // 프로젝트 생성
     @PostMapping("/api/projects")
-    public void postProject(@RequestBody @Valid ProjectRequestDto projectRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void postProject(@RequestBody ProjectRequestDto projectRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         projectService.createProject(projectRequestDto, userDetails.getUser());
     }
 

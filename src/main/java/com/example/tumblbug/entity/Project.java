@@ -45,9 +45,6 @@ public class Project {
 
     private String plan;
 
-    @OneToMany(mappedBy = "project")
-    private List<Image> images;
-
     private String creatorName;
 
     private String creatorBiography;
@@ -74,9 +71,6 @@ public class Project {
                 .map((rewardRequestDto) -> new Reward(rewardRequestDto, this))
                 .collect(Collectors.toList());
         this.plan = projectRequestDto.getPlan();
-        this.images = projectRequestDto.getImages().stream()
-                .map((image) -> new Image(image, this))
-                .collect(Collectors.toList());
         this.creatorName = projectRequestDto.getCreatorName();
         this.creatorBiography = projectRequestDto.getCreatorBiography();
         this.totalFundingPrice = 0;

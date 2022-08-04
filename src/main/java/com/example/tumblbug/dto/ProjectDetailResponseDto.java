@@ -17,7 +17,7 @@ public class ProjectDetailResponseDto {
 
     private String title;
 
-    private List<Thumbnail> thumbnails;
+    private List<String> thumbnails;
 
     private Integer goal;
 
@@ -41,7 +41,9 @@ public class ProjectDetailResponseDto {
         this.category = project.getCategory();
         this.summary = project.getSummary();
         this.title = project.getTitle();
-//        this.thumbnails = project.getThumbnails();
+        this.thumbnails = project.getThumbnails().stream()
+                .map(Thumbnail::getUrl)
+                .collect(Collectors.toList());
         this.goal = project.getGoal();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();

@@ -23,7 +23,7 @@ public class JwtDecoder {
 
     public String decodeUsername(String token) {
         DecodedJWT decodedJWT = isValidToken(token)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token is invalid"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유효한 토큰이 아닙니다."));
 
         Date expiredDate = decodedJWT
                 .getClaim(CLAIM_EXPIRED_DATE)
@@ -31,7 +31,7 @@ public class JwtDecoder {
 
         Date now = new Date();
         if (expiredDate.before(now)) {
-            throw new IllegalArgumentException("유효한 토큰이 아닙니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "유효한 토큰이 아닙니다.");
         }
 
         String email = decodedJWT

@@ -6,7 +6,6 @@ import com.example.tumblbug.dto.ProjectResponseDto;
 import com.example.tumblbug.dto.ProjectsByCategoryResponseDto;
 import com.example.tumblbug.entity.Project;
 import com.example.tumblbug.entity.User;
-import com.example.tumblbug.repository.ImageRepository;
 import com.example.tumblbug.repository.ProjectRepository;
 import com.example.tumblbug.repository.RewardRepository;
 import com.example.tumblbug.repository.ThumbnailRepository;
@@ -17,7 +16,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -30,11 +32,55 @@ public class ProjectService {
 
     private final ThumbnailRepository thumbnailRepository;
 
-    private final ImageRepository imageRepository;
-
     // 프로젝트 리스트 조회
-    public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category) {
-        List<Project> projects = projectRepository.findAllByCategory(category);
+    public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category, String sort, String query) {
+        Set<String> categories = new HashSet<>(Arrays.asList("all", "game", "fashion", "culture", "pet", "beauty"));
+        Set<String> sorts = new HashSet<>(Arrays.asList("popular", "publishedAt", "amount", "endedAt"));
+
+        if (!categories.contains(category)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "category 값이 유효하지 않습니다");
+        }
+        if (!sorts.contains(sort)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "sort 값이 유효하지 않습니다");
+        }
+
+        List<Project> projects = null;
+        if (category.equals("all")) {
+            switch (sort) {
+                case "popular":
+                    projects = projectRepository.findAllByTitleContainingOrderByFundingCountDesc(query);
+                    break;
+                case "publishedAt":
+                    projects = projectRepository.findAllByTitleContainingOrderByStartDateDesc(query);
+                    break;
+                case "amount":
+                    projects = projectRepository.findAllByTitleContainingOrderByTotalFundingPriceDesc(query);
+                    break;
+                case "endedAt":
+                    projects = projectRepository.findAllByTitleContainingOrderByEndDateAsc(query);
+                    break;
+            }
+        } else {
+            switch (sort) {
+                case "popular":
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByFundingCountDesc(category, query);
+                    break;
+                case "publishedAt":
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByStartDateDesc(category, query);
+                    break;
+                case "amount":
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByTotalFundingPriceDesc(category, query);
+                    break;
+                case "endedAt":
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByEndDateAsc(category, query);
+                    break;
+            }
+        }
+
+        if (projects == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "프로젝트 목록을 조회하는데 실패하였습니다");
+        }
+
         return projects.stream()
                 .map(ProjectsByCategoryResponseDto::new)
                 .collect(Collectors.toList());
@@ -53,10 +99,8 @@ public class ProjectService {
         Project project = projectRepository.save(new Project(projectRequestDto, user));
         rewardRepository.saveAll(project.getRewards());
         thumbnailRepository.saveAll(project.getThumbnails());
-        imageRepository.saveAll(project.getImages());
         return new ProjectResponseDto(project);
     }
-
 
     //=============날짜 관련 유효성 체크=============//
     public static class ValidDate {

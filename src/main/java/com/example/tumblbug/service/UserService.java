@@ -10,15 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
-
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
+    private final UserRepository userRepository;
 
     // 회원가입
     @Transactional
@@ -26,19 +24,13 @@ public class UserService {
         String email = requestDto.getEmail();
         String name = requestDto.getName();
         String password = requestDto.getPassword();
-        String confirmPassword = requestDto.getConfirmPassword();
 
-        //회원가입 빈 값
-        userValidator.checkIsEmpty(email, password, name);
         //이메일 중복확인
-        Optional<User> foundEmail = userRepository.findByEmail(email);
-        userValidator.checkEmail(foundEmail);
+        userValidator.checkEmail(userRepository.findByEmail(email));
         //비밀번호 중복확인
-        userValidator.confirmPassword(password, confirmPassword);
-        //비밀번호 정규식 유효성검사
-        userValidator.checkPassword(password);
+        userValidator.confirmPassword(password, requestDto.getConfirmPassword());
 
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+        String encodedPassword = passwordEncoder.encode(password);
         userRepository.save(new User(email, name, encodedPassword));
     }
 
