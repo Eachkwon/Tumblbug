@@ -14,8 +14,9 @@ public class RewardRequestDto {
     @Length(max = 50, message = "최대 50자 이하로 적어주세요.")
     private String rewardItem;
 
-    @NotBlank(message = "목표 금액은 공백일 수 없습니다")
-    @Min(value = 1_000, message = "1000원 이상의 금액을 입력해주세요.")
+    // @NotBlank(message = "목표 금액은 공백일 수 없습니다")
+    // @Min(value = 1_000, message = "1000원 이상의 금액을 입력해주세요.")
+    @Min(value = 1, message = "1원 이상의 금액을 입력해주세요.")
     @Max(value = Integer.MAX_VALUE, message = "2,147,483,647원 이하의 금액을 입력해주세요.")
     private Integer fundingPrice;
 

@@ -1,11 +1,14 @@
 package com.example.tumblbug.service;
 
-import com.example.tumblbug.dto.FundResponseDto;
-import com.example.tumblbug.dto.MyFundigHistoryResponeseDto;
+import com.example.tumblbug.dto.MyFundDetailResponseDto;
+import com.example.tumblbug.dto.MyFundsResponseDto;
 import com.example.tumblbug.entity.Fund;
+import com.example.tumblbug.entity.User;
 import com.example.tumblbug.repository.FundRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,19 +16,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class MyPageService {
+
     private final FundRepository fundRepository;
 
-    public List<FundResponseDto> getfundList(Long userId) {
-        List<Fund> funds = fundRepository.findAllByUser(userId);
+    public List<MyFundsResponseDto> getMyFunds(User user) {
+        List<Fund> funds = fundRepository.findAllByUser(user);
         return funds.stream()
-                .map(FundResponseDto::new)
+                .map(MyFundsResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-
-    public MyFundigHistoryResponeseDto getMyFundingHistory(Long userId, Long fundId) {
-        Fund fund = fundRepository.findFundByUserAndFundId(userId, fundId);
-        MyFundigHistoryResponeseDto myFundigHistoryResponeseDto = new MyFundigHistoryResponeseDto(fund);
-        return myFundigHistoryResponeseDto;
+    public MyFundDetailResponseDto getMyFundDetail(Long fundId) {
+        Fund fund = fundRepository.findById(fundId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fund " + fundId + " is not found"));
+        return new MyFundDetailResponseDto(fund);
     }
+
 }

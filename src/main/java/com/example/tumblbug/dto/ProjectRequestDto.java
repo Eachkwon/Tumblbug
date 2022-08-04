@@ -17,7 +17,8 @@ public class ProjectRequestDto {
     private String category;
 
     @NotBlank(message = "프로젝트 요약은 공백일 수 없습니다")
-    @Length(min = 10, max = 50, message = "최소 10자 이상 최대 50자 이하로 적어주세요.")
+    // @Length(min = 10, max = 50, message = "최소 10자 이상 최대 50자 이하로 적어주세요.")
+    @Length(max = 50, message = "최대 50자 이하로 적어주세요.")
     private String summary;
 
     @NotBlank(message = "프로젝트 제목은 공백일 수 없습니다")
@@ -28,8 +29,9 @@ public class ProjectRequestDto {
     @Size(min = 1, max = 5, message = "대표 이미지는 최소 1개, 최대 5개까지 업로드 가능합니다")
     private List<ImageRequestDto> thumbnails;
 
-    @NotBlank(message = "목표 금액은 공백일 수 없습니다")
-    @Min(value = 500_000, message = "50만원 이상의 금액을 입력해주세요.")
+    // @NotBlank(message = "목표 금액은 공백일 수 없습니다")
+    // @Min(value = 500_000, message = "50만원 이상의 금액을 입력해주세요.")
+    @Min(value = 1, message = "1원 이상의 금액을 입력해주세요.")
     @Max(value = Integer.MAX_VALUE, message = "2,147,483,647원 이하의 금액을 입력해주세요.")
     private Integer goal;
 
@@ -52,7 +54,8 @@ public class ProjectRequestDto {
     private String creatorName;
 
     @NotBlank(message = "창작자 소개는 공백일 수 없습니다")
-    @Length(min = 10, max = 300, message = "최소 10자 이상 최대 300자 이하로 적어주세요.")
+    // @Length(min = 10, max = 300, message = "최소 10자 이상 최대 300자 이하로 적어주세요.")
+    @Length(max = 300, message = "최소 10자 이상 최대 300자 이하로 적어주세요.")
     private String creatorBiography;
 
 }

@@ -43,6 +43,7 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private List<Reward> rewards;
 
+    @Lob
     private String plan;
 
     private String creatorName;

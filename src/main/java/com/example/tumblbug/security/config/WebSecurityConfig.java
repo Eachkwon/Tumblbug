@@ -91,6 +91,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/signup").permitAll()
                 .antMatchers("/api/login").permitAll()
+                .antMatchers("/kakao/callback").permitAll()
+                .antMatchers("/api/mypage").permitAll()
                 .anyRequest()
                 .permitAll()
                 .and()
@@ -139,11 +141,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("POST,/api/signup");
         skipPathList.add("POST,/api/emailCheck");
         // 조회 API 허용
-        skipPathList.add("GET,/kakao/**");
+//        skipPathList.add("GET,/kakao/**");
         skipPathList.add("GET,/api/projects/**");
-//        // 카카오 로그인 허용
-//        skipPathList.add("POST,https://kauth.kakao.com/oauth/token");
-//        skipPathList.add("POST,https://kapi.kakao.com/v2/user/me");
+        // 카카오 로그인 허용
+        skipPathList.add("POST,https://kauth.kakao.com/oauth/token");
+        skipPathList.add("POST,https://kapi.kakao.com/v2/user/me");
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");

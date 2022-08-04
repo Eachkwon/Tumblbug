@@ -1,7 +1,7 @@
 package com.example.tumblbug.controller;
 
-import com.example.tumblbug.dto.FundResponseDto;
-import com.example.tumblbug.dto.MyFundigHistoryResponeseDto;
+import com.example.tumblbug.dto.MyFundDetailResponseDto;
+import com.example.tumblbug.dto.MyFundsResponseDto;
 import com.example.tumblbug.security.UserDetailsImpl;
 import com.example.tumblbug.service.MyPageService;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +18,14 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
-    @GetMapping("api/mypage")
-    public List<FundResponseDto> getFundList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long userId = userDetails.getUser().getUserId();
-        return myPageService.getfundList(userId);
+    @GetMapping("/api/my-page")
+    public List<MyFundsResponseDto> getMyFunds(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return myPageService.getMyFunds(userDetails.getUser());
     }
 
-    @GetMapping("api/mypage/{fundId}")
-    public MyFundigHistoryResponeseDto getMyFundingHistory(@PathVariable Long fundId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long userId = userDetails.getUser().getUserId();
-        return myPageService.getMyFundingHistory(fundId, userId);
+    @GetMapping("/api/my-page/{fundId}")
+    public MyFundDetailResponseDto getMyFundDetail(@PathVariable Long fundId) {
+        return myPageService.getMyFundDetail(fundId);
     }
-
 
 }
