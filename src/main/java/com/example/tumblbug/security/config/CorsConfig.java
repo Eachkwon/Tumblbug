@@ -11,7 +11,7 @@ import java.util.Arrays;
 @Configuration
 public class CorsConfig {
     @Bean
-    public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); //내 서버가 응답을 할때 json을 자바스크립트에서 처리할 수 있게 할지를 설정.
@@ -20,6 +20,7 @@ public class CorsConfig {
         config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedOrigin("https://kauth.kakao.com");
         config.addAllowedOrigin("https://kapi.kakao.com");
+        config.addAllowedOrigin("http://tumblbug-clone.s3-website.ap-northeast-2.amazonaws.com");
         config.addAllowedHeader("*");//모든 header에 응답을 허용하겠다.
 
 
@@ -31,7 +32,7 @@ public class CorsConfig {
 
         config.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
         // 모든 api/** 주소는 이 config 설정을 따라간다.
-        source.registerCorsConfiguration("/**",config);
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }

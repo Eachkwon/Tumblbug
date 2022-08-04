@@ -3,7 +3,6 @@ package com.example.tumblbug.service;
 import com.example.tumblbug.dto.KakaoUserInfoDto;
 import com.example.tumblbug.entity.User;
 import com.example.tumblbug.repository.UserRepository;
-import com.example.tumblbug.security.UserDetailsImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,10 +11,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -29,10 +28,13 @@ public class KakaoUserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    private final AuthenticationManager authenticationManager;
+
     @Autowired
-    public KakaoUserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public KakaoUserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     public void loginByKakao(String code) throws JsonProcessingException {
@@ -58,7 +60,7 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "34b10724e3757bf211c06db0b9186f27");
-        body.add("redirect_uri", "http://3.39.231.144/kakao/callback");
+        body.add("redirect_uri", "http://tumblbug-clone.s3-website.ap-northeast-2.amazonaws.com/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -132,8 +134,11 @@ public class KakaoUserService {
     }
 
     private void forceLogin(User kakaoUser) {
-        UserDetails userDetails = new UserDetailsImpl(kakaoUser);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        String email = kakaoUser.getEmail();
+        String password = kakaoUser.getPassword();
+
+        Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(email, password);
+        Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
