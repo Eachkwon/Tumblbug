@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,4 +58,58 @@ public class ProjectService {
     }
 
 
+    //=============날짜 관련 유효성 체크=============//
+    public static class ValidDate {
+        //예외 조건 1 (시작일은 오늘보다 늦어야 한다)
+
+        public static boolean vaildStartDate(LocalDate startDate) {
+            return startDate.isAfter(LocalDate.now());
+        }
+
+
+        //예외 조건 2 (종료일은 시작일보다 늦어야한다)
+        public static boolean vaildEndDate(LocalDate startDate, LocalDate endDate) {
+            return startDate.isBefore(endDate);
+        }
+
+
+        //예외 조건 확인 후 예외 던지기
+        public static void checkDate(LocalDate startDate, LocalDate endDate) throws ProjectService.StartDateException, ProjectService.EndDateExeption {
+            if (!vaildStartDate(startDate)) {
+                throw new ProjectService.EndDateExeption("펀딩 시작일은 오늘을 제외한 익일부터 가능합니다.");
+            } else if (!vaildEndDate(startDate, endDate)) {
+                throw new ProjectService.StartDateException("펀딩기간은 최소 1일이상입니다.");
+            }
+        }
+
+        //예외 트라이캐치
+        public static String vaildStartAndEndDate(LocalDate startDate, LocalDate endDate) {
+            try {
+                checkDate(startDate, endDate);
+            } catch (ProjectService.StartDateException sd) {
+                sd.printStackTrace();
+                return sd.getMessage();
+
+            } catch (ProjectService.EndDateExeption ed) {
+                ed.printStackTrace();
+                return ed.getMessage();
+            }
+            return "";
+        }
+    }
+
+    //예외 만들기
+    static class StartDateException extends Exception {
+        public StartDateException(String msg) {
+            super(msg);
+        }
+    }
+
+    static class EndDateExeption extends Exception {
+        public EndDateExeption(String msg) {
+            super(msg);
+        }
+    }
+
+//============날짜관련 유효성체크 종료============//
 }
