@@ -6,11 +6,11 @@ import com.example.tumblbug.dto.ProjectsByCategoryResponseDto;
 import com.example.tumblbug.security.UserDetailsImpl;
 import com.example.tumblbug.service.ProjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,11 +20,13 @@ public class ProjectController {
 
     // 프로젝트 리스트 조회
     @GetMapping("/api/projects")
-    public List<ProjectsByCategoryResponseDto> getProjects(
+    public Slice<ProjectsByCategoryResponseDto> getProjects(
+            @RequestParam int page,
+            @RequestParam int size,
             @RequestParam(defaultValue = "all") String category,
             @RequestParam(defaultValue = "popular") String sort,
             @RequestParam(defaultValue = "") String query) {
-        return projectService.getProjectsByCategory(category, sort, query);
+        return projectService.getProjectsByCategory(page, size, category, sort, query);
     }
 
     // 프로젝트 상세정보 조회
