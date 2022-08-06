@@ -10,6 +10,9 @@ import com.example.tumblbug.repository.ProjectRepository;
 import com.example.tumblbug.repository.RewardRepository;
 import com.example.tumblbug.repository.ThumbnailRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,9 +21,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +34,7 @@ public class ProjectService {
     private final ThumbnailRepository thumbnailRepository;
 
     // 프로젝트 리스트 조회
-    public List<ProjectsByCategoryResponseDto> getProjectsByCategory(String category, String sort, String query) {
+    public Slice<ProjectsByCategoryResponseDto> getProjectsByCategory(int page, int size, String category, String sort, String query) {
         Set<String> categories = new HashSet<>(Arrays.asList("all", "game", "fashion", "culture", "pet", "beauty"));
         Set<String> sorts = new HashSet<>(Arrays.asList("popular", "publishedAt", "amount", "endedAt"));
 
@@ -44,35 +45,37 @@ public class ProjectService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "sort 값이 유효하지 않습니다");
         }
 
-        List<Project> projects = null;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Slice<Project> projects = null;
         if (category.equals("all")) {
             switch (sort) {
                 case "popular":
-                    projects = projectRepository.findAllByTitleContainingOrderByFundingCountDesc(query);
+                    projects = projectRepository.findAllByTitleContainingOrderByFundingCountDesc(query, pageable);
                     break;
                 case "publishedAt":
-                    projects = projectRepository.findAllByTitleContainingOrderByStartDateDesc(query);
+                    projects = projectRepository.findAllByTitleContainingOrderByStartDateDesc(query, pageable);
                     break;
                 case "amount":
-                    projects = projectRepository.findAllByTitleContainingOrderByTotalFundingPriceDesc(query);
+                    projects = projectRepository.findAllByTitleContainingOrderByTotalFundingPriceDesc(query, pageable);
                     break;
                 case "endedAt":
-                    projects = projectRepository.findAllByTitleContainingOrderByEndDateAsc(query);
+                    projects = projectRepository.findAllByTitleContainingOrderByEndDateAsc(query, pageable);
                     break;
             }
         } else {
             switch (sort) {
                 case "popular":
-                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByFundingCountDesc(category, query);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByFundingCountDesc(category, query, pageable);
                     break;
                 case "publishedAt":
-                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByStartDateDesc(category, query);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByStartDateDesc(category, query, pageable);
                     break;
                 case "amount":
-                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByTotalFundingPriceDesc(category, query);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByTotalFundingPriceDesc(category, query, pageable);
                     break;
                 case "endedAt":
-                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByEndDateAsc(category, query);
+                    projects = projectRepository.findAllByCategoryAndTitleContainingOrderByEndDateAsc(category, query, pageable);
                     break;
             }
         }
@@ -81,9 +84,7 @@ public class ProjectService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "프로젝트 목록을 조회하는데 실패하였습니다");
         }
 
-        return projects.stream()
-                .map(ProjectsByCategoryResponseDto::new)
-                .collect(Collectors.toList());
+        return projects.map(ProjectsByCategoryResponseDto::new);
     }
 
     // 프로젝트 상세정보 조회
