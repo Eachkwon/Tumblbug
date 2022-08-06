@@ -5,13 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.example.tumblbug.service.ProjectService.ValidDate.vaildStartAndEndDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -59,6 +59,7 @@ public class Project {
     private User user;
 
     public Project(ProjectRequestDto projectRequestDto, User user) {
+        validateDates(projectRequestDto.getStartDate(), projectRequestDto.getEndDate());
         this.category = projectRequestDto.getCategory();
         this.summary = projectRequestDto.getSummary();
         this.title = projectRequestDto.getTitle();
@@ -77,8 +78,15 @@ public class Project {
         this.totalFundingPrice = 0;
         this.fundingCount = 0;
         this.user = user;
-        vaildStartAndEndDate(startDate, endDate);
+    }
 
+    public void validateDates(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "시작일은 오늘 이후여야 합니다");
+        }
+        if (endDate.isBefore(startDate)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "종료일은 시작일 이후여야 합니다");
+        }
     }
 
     public void addFund(Reward reward) {
